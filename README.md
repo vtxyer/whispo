@@ -6,7 +6,7 @@ AI-powered dictation tool.
 
 Currently building for macOS (Apple Silicon) and Windows x64.
 
-[Releases](https://github.com/egoist/whispo/releases/latest)
+[Releases](https://github.com/vtxyer/whispo/releases/latest)
 
 ## Preview
 
