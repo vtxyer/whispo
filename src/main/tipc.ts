@@ -163,9 +163,10 @@ export const router = {
       )
       form.append(
         "model",
-        config.sttProviderId === "groq" ? "whisper-large-v3" : "whisper-1",
+        config.sttProviderId === "groq" ? "whisper-large-v3-turbo" : "whisper-1",
       )
-      form.append("response_format", "json")
+      form.append("response_format", "verbose_json")
+      form.append("prompt", "台灣繁體中文和 English 交雜，軟體工程師的語言")
 
       const groqBaseUrl = config.groqBaseUrl || "https://api.groq.com/openai/v1"
       const openaiBaseUrl = config.openaiBaseUrl || "https://api.openai.com/v1"
@@ -183,14 +184,16 @@ export const router = {
         },
       )
 
+      
       if (!transcriptResponse.ok) {
         const message = `${transcriptResponse.statusText} ${(await transcriptResponse.text()).slice(0, 300)}`
-
         throw new Error(message)
       }
-
-      const json: { text: string } = await transcriptResponse.json()
-      const transcript = await postProcessTranscript(json.text)
+      
+      const resp = await transcriptResponse.json()
+      const textSegments = resp.segments.map(segment => segment.text);
+      const rawTranscript = textSegments.join(' ');
+      const transcript = await postProcessTranscript(rawTranscript)
 
       const history = getRecordingHistory()
       const item: RecordingHistoryItem = {
