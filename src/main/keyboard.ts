@@ -12,11 +12,11 @@ import { state } from "./state"
 
 export function listenToKeyboardEvents() {
   try {
-    let isHoldingCtrlKey = false
+    let isHoldingAltKey = false
     let startRecordingTimer: NodeJS.Timeout | undefined
 
     // keys that are currently pressed down without releasing
-    // excluding ctrl
+    // excluding Alt
     const keysPressed = new Set<number>()
 
     if (process.env.IS_MAC) {
@@ -43,38 +43,34 @@ export function listenToKeyboardEvents() {
       }
 
       if (configStore.get().shortcut === "ctrl-backslash") {
-        if (e.keycode === UiohookKey.Backslash && e.ctrlKey) {
+        if (e.keycode === UiohookKey.Backslash && UiohookKey.F2) {
           getWindowRendererHandlers("panel")?.startOrFinishRecording.send()
         }
       } else {
-        if (e.keycode === UiohookKey.Ctrl) {
+        if (e.keycode === UiohookKey.Alt) {
           if (keysPressed.size > 0) {
-            console.log("ignore ctrl because other keys are pressed")
+            console.log("ignore Alt because other keys are pressed")
             return
           }
 
           if (startRecordingTimer) {
-            // console.log('already started recording timer')
             return
           }
 
           startRecordingTimer = setTimeout(() => {
-            isHoldingCtrlKey = true
-
+            isHoldingAltKey = true
             console.log("start recording")
-
             showPanelWindowAndStartRecording()
           }, 800)
         } else {
           keysPressed.add(e.keycode)
           cancelRecordingTimer()
 
-          // when holding ctrl key, pressing any other key will stop recording
-          if (isHoldingCtrlKey) {
+          if (isHoldingAltKey) {
             stopRecordingAndHidePanelWindow()
           }
 
-          isHoldingCtrlKey = false
+          isHoldingAltKey = false
         }
       }
     })
@@ -83,18 +79,17 @@ export function listenToKeyboardEvents() {
       if (configStore.get().shortcut === "ctrl-backslash") return
 
       cancelRecordingTimer()
-
       keysPressed.delete(e.keycode)
 
-      if (e.keycode === UiohookKey.Ctrl) {
-        console.log("release ctrl")
-        if (isHoldingCtrlKey) {
+      if (e.keycode === UiohookKey.Alt) {
+        console.log("release Alt")
+        if (isHoldingAltKey) {
           getWindowRendererHandlers("panel")?.finishRecording.send()
         } else {
           stopRecordingAndHidePanelWindow()
         }
 
-        isHoldingCtrlKey = false
+        isHoldingAltKey = false
       }
     })
 

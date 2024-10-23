@@ -2,18 +2,17 @@ name: Build/release
 
 on:
   push:
+    tags:
+      - 'v*'  # Only run on version tags
   workflow_dispatch:
 
 jobs:
   release:
     runs-on: ${{ matrix.os }}
 
-    if: startsWith(github.ref, 'refs/tags/v')
-
     strategy:
       matrix:
-        # os: [macos-latest, windows-latest]
-        os: [windows-latest]
+        os: [macos-latest, windows-latest]
 
     steps:
       - name: Check out Git repository
@@ -50,14 +49,30 @@ jobs:
       - name: Install deps
         run: pnpm i
 
-      - name: Release
+      # - name: Release
+      #   run: pnpm run release
+      #   env:
+      #     APPLE_ID: ${{ secrets.APPLE_ID }}
+      #     APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      #     CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      #     CSC_LINK: ${{ secrets.CSC_LINK }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     # https://github.com/electron-userland/electron-builder/issues/3179
+      #     USE_HARD_LINKS: false
+
+      - name: Build
         run: pnpm run release
         env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          CSC_LINK: ${{ secrets.CSC_LINK }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # https://github.com/electron-userland/electron-builder/issues/3179
           USE_HARD_LINKS: false
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true  # Creates draft release instead of publishing
+          files: |
+            dist/*.exe
+            dist/latest.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
