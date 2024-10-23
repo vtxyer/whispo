@@ -64,8 +64,8 @@ export function Component() {
           <div className="flex items-center gap-1">
             <div>
               {shortcut === "hold-ctrl"
-                ? "Hold Ctrl key to record, release it to finish recording"
-                : "Press Ctrl+\\ to start and finish recording"}
+                ? "Hold Alt key to record, release it to finish recording"
+                : "Press Alt+\\ to start and finish recording"}
             </div>
             <TooltipProvider disableHoverableContent delayDuration={0}>
               <Tooltip>
@@ -95,8 +95,8 @@ export function Component() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="hold-ctrl">Hold Ctrl</SelectItem>
-              <SelectItem value="ctrl-backslash">Ctrl+{"\\"}</SelectItem>
+              <SelectItem value="hold-ctrl">Hold Alt</SelectItem>
+              <SelectItem value="ctrl-backslash">Alt+{"\\"}</SelectItem>
             </SelectContent>
           </Select>
         </Control>

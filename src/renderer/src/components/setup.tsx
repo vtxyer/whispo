@@ -24,7 +24,7 @@ export function Setup() {
             {process.env.IS_MAC && (
               <PermissionBlock
                 title="Accessibility Access"
-                description={`We need Accessibility Access to capture keyboard events, so that you can hold Ctrl key to start recording, we don't log or store your keyboard events.`}
+                description={`We need Accessibility Access to capture keyboard events, so that you can hold Alt key to start recording, we don't log or store your keyboard events.`}
                 actionText="Enable in System Settings"
                 actionHandler={() => {
                   tipcClient.requestAccesssbilityAccess()

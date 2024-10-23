@@ -94,7 +94,7 @@ export function Component() {
             <span className="text-sm text-muted-foreground">
               Hold{" "}
               <span className="inline-flex h-6 items-center rounded-lg border p-1 text-sm dark:border-neutral-700 dark:bg-neutral-800">
-                Ctrl
+                Alt
               </span>{" "}
               to record
             </span>

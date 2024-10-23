@@ -16,7 +16,7 @@ https://github.com/user-attachments/assets/2344a817-f36c-42b0-9ebc-cdd6e926b7a0
 
 ## Features
 
-- Hold `Ctrl` key to record your voice, release to transcribe it.
+- Hold `Alt` key to record your voice, release to transcribe it.
 - Automatically insert the transcript into the application you are using.
 - Works with any application that supports text input.
 - Data is stored locally on your machine.
